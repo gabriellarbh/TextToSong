@@ -1,6 +1,9 @@
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -30,8 +33,8 @@ public class FileHandler {
     public FileHandler(){
         fileChooser = new JFileChooser();
         txtMusic = "";
-        pickTxt = "Load - Choose a .txt File";
-        pickDir = "Save - Choose a directory";
+        pickTxt = "Open .txt File";
+        pickDir = "Save";
     }
     
     public String OpenFile () {
@@ -53,14 +56,26 @@ public class FileHandler {
     }
     
     public void SaveFile(JTextArea saveTxt){
-        String savePath;
+        File newFile;
+        FileOutputStream fileStream;
+        byte[] stream;
+        String output = saveTxt.getText();
         fileChooser.setDialogTitle(pickDir);
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnValue = fileChooser.showOpenDialog(null);
         if(returnValue == JFileChooser.APPROVE_OPTION){
-            savePath = fileChooser.getCurrentDirectory().getAbsolutePath();
-            
+            try {
+              newFile = fileChooser.getSelectedFile();
+              fileStream = new FileOutputStream(newFile);
+              stream = output.getBytes();
+              fileStream.write(stream);
+              fileStream.close();
+              JOptionPane.showMessageDialog(null, "File saved successfully!"); 
+            } catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Could not save file!"); 
+            }
         }
+        else
+            JOptionPane.showMessageDialog(null, "Could not save file!"); 
         
     }
     
