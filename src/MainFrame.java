@@ -9,11 +9,13 @@
  * @author gabriellabarbieri
  */
 public class MainFrame extends javax.swing.JFrame {
+    public static FileHandler fhHandler;
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
+        fhHandler = new FileHandler();
         initComponents();
     }
 
@@ -50,6 +52,11 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Text File"));
 
         saveTxt.setText("Save");
+        saveTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveTxtActionPerformed(evt);
+            }
+        });
 
         loadTxt.setText("Load");
         loadTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +187,16 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void loadTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadTxtActionPerformed
         // TODO add your handling code here:
+        String input;
+        input = fhHandler.OpenFile();
+        jTextArea1.setText(input);
+       
     }//GEN-LAST:event_loadTxtActionPerformed
+
+    private void saveTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTxtActionPerformed
+        // TODO add your handling code here:
+        fhHandler.SaveFile(jTextArea1);
+    }//GEN-LAST:event_saveTxtActionPerformed
 
     /**
      * @param args the command line arguments
