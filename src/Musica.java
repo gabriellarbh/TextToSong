@@ -12,43 +12,33 @@ import java.util.ArrayList;
  * @author gabriellabarbieri
  */
 public class Musica {
-    private String musica;
-    private static final int addVolume = 50;
-    private static final int decTempo = 10;
+    private String musicaFinal;
+    private String musicaRaw;
+    private int octave;
     private int tempo;
+    private int indexInstr;
+    private static final int addVolume = 100;
+    private static final int decTempo = 10;
+    private static final int defaultOct = 5;
+    private static final int defaultTempo = 120;
     
     public Musica(String input, int instrument){
         //Chamar função de parser
-        this.musica = "";
-        this.tempo = 120;
-        int i;
-        input = input.toLowerCase();
+        this.musicaFinal = "";
+        this.tempo = defaultTempo;
+        this.octave = defaultOct;
+        this.indexInstr = 0;
+        musicaRaw = input.toLowerCase();
         char current;
-        int currentOctave = 5;
-        int currentVolume = 300;
-        
-        for(i = 0; i < input.length(); i++){
-            current = input.charAt(i);
+        int i;
+        for(i = 0; i < musicaRaw.length(); i++){
+            current = musicaRaw.charAt(i);
             if(isNota(current))
-                addNota(current, currentOctave);
+                addNota(current, octave);
             else if (isDigit(current))
-                currentOctave = Character.getNumericValue(current);
-            else {
-                switch(current){
-                    case '!':
-                        currentVolume = currentVolume + addVolume;
-                        break;
-                    case '?':
-                    case '.':
-                        currentOctave = 5;
-                        break;
-                    case '\n':
-                    case ';':
-                        decTempo();
-                        break;  
-                    
-                }
-            }        
+                octave = Character.getNumericValue(current);
+            else 
+                parseEspecialChar(current);  
         }
         
     }
@@ -59,24 +49,61 @@ public class Musica {
     }
     
     private boolean isDigit(char digit){
-        return (digit >= '0' && digit <= '9');
+        return (digit >= '1' && digit <= '9');
     }
     
     private void addNota(char nota, int oitava){
         Nota nova = new Nota(nota,oitava);
-        musica = musica + " " + Integer.toString(nova.getNota());
+        musicaFinal = musicaFinal + " " + Integer.toString(nova.getNota());
     }
     
     private void changeInstrument(){
-        
+        if(this.indexInstr == 127)
+            this.indexInstr = 0;
+        else
+            this.indexInstr = this.indexInstr + 2;
+        this.musicaFinal = this.musicaFinal + " I" + this.indexInstr;
     }
     
     private void decTempo(){
         this.tempo = this.tempo - decTempo;
-        this.musica = musica + " " + "T" + this.tempo;
+        this.musicaFinal = this.musicaFinal + " T" + this.tempo;
     }
 
     public String getMusica(){
-        return this.musica;
+        return this.musicaFinal;
     }
+    
+    private void setVolume(int volume){
+        this.musicaFinal = this.musicaFinal + " X[Volume]=" + volume;
+    }
+    
+    private void parseEspecialChar(char current){
+        int currentVolume = 10000;
+        switch(current){
+                    case '!':
+                        currentVolume = currentVolume + addVolume;
+                        setVolume(currentVolume);
+                        break;
+                    case '?':
+                    case '.':
+                        octave = defaultOct;
+                        break;
+                    case '\n':
+                        changeInstrument();
+                        break;
+                    case ';':
+                        decTempo();
+                        break;  
+                    case ',':
+                        currentVolume = currentVolume - addVolume;
+                        setVolume(currentVolume);
+                    case ' ':
+                        addNota('c',0);
+                        break;
+                    
+                }
+    }
+ 
+    
     }
