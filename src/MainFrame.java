@@ -108,6 +108,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         pause.setText("ll");
+        pause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pauseActionPerformed(evt);
+            }
+        });
 
         stop.setText("P");
 
@@ -188,9 +193,13 @@ public class MainFrame extends javax.swing.JFrame {
     private void playActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playActionPerformed
         // TODO add your handling code here:
         musica = new Musica(jTextArea1.getText(),0);
-        player.play(musica.getMusica());
-        
+        play();
     }//GEN-LAST:event_playActionPerformed
+
+    private void pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseActionPerformed
+        // TODO add your handling code here:
+        player.
+    }//GEN-LAST:event_pauseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,6 +239,11 @@ public class MainFrame extends javax.swing.JFrame {
                 frame.setVisible(true);
             }
         });
+    }
+    
+    private void play(){
+        player.play(musica.getMusica());
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
