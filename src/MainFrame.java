@@ -8,14 +8,21 @@
  *
  * @author gabriellabarbieri
  */
+import org.jfugue.player.Player;
+import org.staccato.*;
+
 public class MainFrame extends javax.swing.JFrame {
     public static FileHandler fhHandler;
+    private Musica musica;
+    private Player player;
+    
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         fhHandler = new FileHandler();
+        player = new Player();
         initComponents();
     }
 
@@ -105,6 +112,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         play.setText(">");
+        play.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playActionPerformed(evt);
+            }
+        });
 
         pause.setText("ll");
 
@@ -197,6 +209,12 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         fhHandler.SaveFile(jTextArea1);
     }//GEN-LAST:event_saveTxtActionPerformed
+
+    private void playActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playActionPerformed
+        // TODO add your handling code here:
+        musica = new Musica(jTextArea1.getText(),0);
+        player.play(musica.getMusica());
+    }//GEN-LAST:event_playActionPerformed
 
     /**
      * @param args the command line arguments
