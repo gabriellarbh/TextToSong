@@ -35,7 +35,11 @@ public class Musica {
             current = musicaRaw.charAt(i);
             if(isNota(current))
                 addNota(current, octave);
-            else if (isDigit(current))
+            else if (isVogal(current))
+                incTempo();
+            else if (isConsoante(current))
+                isNota(current);
+            else if (isNumber(current))
                 octave = Character.getNumericValue(current);
             else 
                 parseEspecialChar(current);  
@@ -45,10 +49,18 @@ public class Musica {
     
     
     private boolean isNota(char nota){
-        return (nota >= 'a' && nota <= 'z');
+        return (nota >= 'a' && nota <= 'g');
     }
     
-    private boolean isDigit(char digit){
+    private boolean isVogal(char vogal){
+        return (vogal == 'i' || vogal == 'o' || vogal == 'u');
+    }
+    
+    private boolean isConsoante(char cons){
+        return (cons >= 'h' && cons <= 'z') && (!isVogal(cons));
+    }
+    
+    private boolean isNumber(char digit){
         return (digit >= '1' && digit <= '9');
     }
     
@@ -66,7 +78,13 @@ public class Musica {
     }
     
     private void decTempo(){
-        this.tempo = this.tempo - decTempo;
+        if(this.tempo > decTempo)
+            this.tempo = this.tempo - decTempo;
+        this.musicaFinal = this.musicaFinal + " T" + this.tempo;
+    }
+    
+    private void incTempo(){
+        this.tempo = this.tempo + decTempo;
         this.musicaFinal = this.musicaFinal + " T" + this.tempo;
     }
 
@@ -75,7 +93,7 @@ public class Musica {
     }
     
     private void setVolume(int volume){
-        this.musicaFinal = this.musicaFinal + " X[Volume]=" + volume;
+        this.musicaFinal = this.musicaFinal + " XVolume=" + volume;
     }
     
     private void parseEspecialChar(char current){
@@ -99,7 +117,7 @@ public class Musica {
                         currentVolume = currentVolume - addVolume;
                         setVolume(currentVolume);
                     case ' ':
-                        addNota('c',0);
+                        addNota(' ',0);
                         break;
                     
                 }

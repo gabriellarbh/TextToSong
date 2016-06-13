@@ -79,6 +79,19 @@ public class FileHandler {
         
     }
     
+    public File SaveMidi(){
+        File midiFile = null;
+        int returnValue = fileChooser.showSaveDialog(null);
+        if(returnValue == JFileChooser.APPROVE_OPTION){
+            try{
+                midiFile = fileChooser.getSelectedFile();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Could not save MIDI file!");
+            }
+        }
+       return midiFile; 
+    }
+    
     private String fileToString(File file) throws IOException{
         String content = readFile(file, StandardCharsets.UTF_8);
         return content;
